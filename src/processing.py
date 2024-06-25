@@ -1,23 +1,25 @@
 from datetime import datetime
+from typing import List, Dict, Any
 
 
-def filter_by_state(records: list, state: str = "EXECUTED") -> list:
+def filter_by_state(transactions: List[Dict[str, Any]],
+                    state: str = 'EXECUTED') -> List[Dict[str, Any]]:
     """
-    Фильтрует операции по заданному состоянию.
+    Фильтрует список транзакций по заданному состоянию.
 
-    :param records: Список операций.
-    :param state: Состояние для фильтрации (по умолчанию 'EXECUTED').
-    :return: Отфильтрованный список операций.
+    :param transactions: Список словарей с данными о транзакциях.
+    :param state: Состояние, по которому нужно фильтровать (по умолчанию 'EXECUTED').
+    :return: Отфильтрованный список транзакций.
     """
-    return [record for record in records if state == record.get("state")]
+    return [transaction for transaction in transactions if state == transaction.get("state")]
 
 
-def sort_by_date(records: list, ascending: bool = True) -> list:
+def sort_by_date(records: list, is_ascending: bool = True) -> list:
     """
     Сортирует операции по возрастанию (по умолчанию).
 
     :param records: Список операций.
-    :param ascending: Параметр для сортировки по дате (по умолчанию True - сортировка по возростанию).
+    :param is_ascending: Параметр для сортировки по дате (по умолчанию True - сортировка по возростанию).
     :return: Отсортированный список операций.
     """
 
@@ -30,4 +32,4 @@ def sort_by_date(records: list, ascending: bool = True) -> list:
         """
         return datetime.strptime(record["date"], "%Y-%m-%dT%H:%M:%S.%f")
 
-    return sorted(records, key=sort_key, reverse=not ascending)
+    return sorted(records, key=sort_key, reverse=not is_ascending)
