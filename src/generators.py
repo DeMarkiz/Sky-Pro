@@ -86,7 +86,7 @@ def filter_by_currency(transactions, currency):
             yield transaction
 
 
-usd_transactions = filter_by_currency(transactions, "RUB")
+usd_transactions = filter_by_currency(transactions, "USD")
 
 for _ in range(2):
     print(next(usd_transactions)["id"])
