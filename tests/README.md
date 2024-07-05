@@ -1,52 +1,34 @@
-# Banking Operations Widget Backend Server
+Banking Operations Widget Backend Server includes the following functional modules:
 
-## Description
+- decorators.py
+- generators.py
+- masks.py
+- processing.py
+- widget.py
 
-Server-side for the banking operations widget, designed for integration into the personal account of a major bank's customer. The widget displays the customer's most recent successful transactions.
+### Functional Modules Overview:
 
-## Dependencies
+#### decorators.py
 
-- Python 3.8+
-- requests 2.32.3
-- flake8 3.8.1
-- mypy 0.4.3
+Purpose:
 
-## Installation
+- log(filename)
+  - The log decorator is used for logging the results of a function execution.
+  - Behavior:
+    - If filename is provided, the result of the function execution will be written to the specified file.
+    - If filename is not provided, the result of the function execution will be printed to the console.
+  - Accepts an optional filename parameter (default **None**).
+    - filename (str): The path to the file where logging will be performed.
+  - Returns the wrapped function with logging.
 
-1. Clone the repository:
-```
-git clone git@github.com:ZorinVS/transactions-widget.git
-```
-2. Install the dependencies:
-```bash
-poetry install
-```
+#### generators.py
 
-## Project Testing
-
+Purpose:
+@@ -98,6 +112,7 @@ poetry install
 The project testing is conducted using the tests package, which includes the following files:
 - init.py
 - conftest.py
+- test_decorators.py
+- test_generators.py
 - test_masks.py
 - test_processing.py
-- test_widget.py
-
-### There are two ways to perform project testing:
-1. Using PyCharm's terminal:
-```bash
-pytest tests
-```
-2. Using PyCharm's functionality:
-- Open the **Edit Configurations** window.
-- Select **pytest**.
-- Specify the directory containing the tests and the project directory.
-- Confirm the changes by clicking **Apply** and **OK**.
-- Run **pytest in tests**
-
-## Documentation:
-
-For more information please contact...
-
-## License:
-
-This project is licensed under the [MIT License](LICENSE).
