@@ -1,25 +1,34 @@
-import os
 import json
+import os
+from typing import Any, Dict, List
+
+from src.logger_config import setup_logger
+
+# Создание и получение именованного логгера
+utils_logger = setup_logger(__name__)
 
 
-def read_transactions(file_path):
+def read_transactions_json(file_path: str) -> List[Dict[str, Any]]:
     """
-    Читает JSON-файл и возвращает список транзакций.
-    Если файл пустой, содержит не список или не найден, возвращает пустой список.
+    Возвращает список словарей с данными о финансовых транзакциях.
+
+    :param file_path: Путь к json-файлу.
+    :return: Список транзакций.
     """
-    # Проверка существования файла
     if not os.path.exists(file_path):
+        utils_logger.warning(f"File {file_path} does not exist.")
         return []
 
     try:
-        # Открытие и чтение файла
-        with open(file_path, 'r', encoding='utf-8') as file:
+        with open(file_path) as file:
             data = json.load(file)
-            # Проверка, что содержимое файла - список
             if isinstance(data, list):
+                utils_logger.info(f"Successfully read file: {file_path}")
                 return data
             else:
+                utils_logger.warning(f"Invalid data format in file: {file_path}")
                 return []
-    except (json.JSONDecodeError, FileNotFoundError):
-        # Обработка ошибок: некорректный JSON или файл не найден
+
+    except (json.JSONDecodeError, IOError) as e:
+        utils_logger.error(f"Error reading file {file_path}: {e}")
         return []
