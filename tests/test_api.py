@@ -1,4 +1,3 @@
-import unittest
 from unittest.mock import patch, Mock
 from src.external_api import convert_currency, get_transaction_amount_in_rub
 

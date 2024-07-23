@@ -175,7 +175,8 @@ def test_read_transactions_json_json_decode_error_logs_error(mock_logger: Mock) 
             # Вызываем тестируемую функцию и проверяем результат
             result = read_transactions_json("dummy_path.json")
             assert result == []
-            mock_logger.error.assert_called_once_with("Error reading file dummy_path.json: Expecting value: line 1 column 1 (char 0)")
+            mock_logger.error.assert_called_once_with("Error reading file dummy_path.json:"
+                                                      " Expecting value: line 1 column 1 (char 0)")
 
 
 def test_read_transactions_json_io_error() -> None:

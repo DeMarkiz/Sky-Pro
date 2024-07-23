@@ -42,4 +42,3 @@ def get_transaction_amount_in_rub(transaction):
     currency = transaction.get('currency', 'RUB')
 
     return convert_currency(amount, currency)
-

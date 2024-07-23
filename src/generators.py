@@ -114,4 +114,3 @@ end_range = 5
 
 for card_number in card_number_generator(start_range, end_range):
     print(card_number)
-
