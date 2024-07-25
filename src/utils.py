@@ -3,6 +3,7 @@ import json
 import os
 import re
 from typing import Any, Dict, Hashable, List
+from collections import Counter
 
 import openpyxl
 import pandas as pd
@@ -103,21 +104,19 @@ def read_transactions_excel(file_path: str) -> List[Dict[Hashable, Any]]:
         return []
 
 
-def search_transactions(transactions: List[Dict], search_string: str) -> List[Dict]:
-    """Фильтрация транзакций по строке поиска в описании"""
+def search_transactions(transactions, search_string):
     pattern = re.compile(re.escape(search_string), re.IGNORECASE)
     return [transaction for transaction in transactions if pattern.search(transaction.get('description', ''))]
 
 
-def categorize_transactions(transactions: List[Dict], categories: List[str]) -> Dict[str, int]:
-    """Подсчет количества транзакций по категориям"""
-    count = {category: 0 for category in categories}
+def count_transactions_by_category(transactions, categories):
+    counter = Counter()
     for transaction in transactions:
-        description = transaction.get('description', '').lower()
+        description = transaction.get('description', '')
         for category in categories:
-            if category.lower() in description:
-                count[category] += 1
-    return count
+            if category in description:
+                counter[category] += 1
+    return dict(counter)
 
 
 def load_transactions_from_json(file_path='data/operations.json'):
@@ -165,5 +164,3 @@ def load_transactions_from_xlsx(file_path='data/transactions_excel.xlsx'):
     except (FileNotFoundError, openpyxl.utils.exceptions.InvalidFileException, PermissionError) as e:
         print(f"Ошибка при загрузке файла: {e}")
         return []
-
-
