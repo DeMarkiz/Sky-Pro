@@ -1,7 +1,10 @@
+import csv
 import json
 import os
+import re
 from typing import Any, Dict, Hashable, List
 
+import openpyxl
 import pandas as pd
 
 from src.logger_config import setup_logger
@@ -98,3 +101,69 @@ def read_transactions_excel(file_path: str) -> List[Dict[Hashable, Any]]:
     except Exception as e:
         utils_logger.error(f"Unexpected error: {e}")
         return []
+
+
+def search_transactions(transactions: List[Dict], search_string: str) -> List[Dict]:
+    """Фильтрация транзакций по строке поиска в описании"""
+    pattern = re.compile(re.escape(search_string), re.IGNORECASE)
+    return [transaction for transaction in transactions if pattern.search(transaction.get('description', ''))]
+
+
+def categorize_transactions(transactions: List[Dict], categories: List[str]) -> Dict[str, int]:
+    """Подсчет количества транзакций по категориям"""
+    count = {category: 0 for category in categories}
+    for transaction in transactions:
+        description = transaction.get('description', '').lower()
+        for category in categories:
+            if category.lower() in description:
+                count[category] += 1
+    return count
+
+
+def load_transactions_from_json(file_path='data/operations.json'):
+    if not os.path.isfile(file_path):
+        print(f"Ошибка: {file_path} не является файлом.")
+        return []
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            transactions = json.load(f)
+            if not isinstance(transactions, list):
+                return []
+            return transactions
+    except (FileNotFoundError, json.JSONDecodeError, PermissionError) as e:
+        print(f"Ошибка при загрузке файла: {e}")
+        return []
+
+
+def load_transactions_from_csv(file_path='data/transactions.csv'):
+    if not os.path.isfile(file_path):
+        print(f"Ошибка: {file_path} не является файлом.")
+        return []
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            transactions = list(reader)
+            return transactions
+    except (FileNotFoundError, csv.Error, PermissionError) as e:
+        print(f"Ошибка при загрузке файла: {e}")
+        return []
+
+
+def load_transactions_from_xlsx(file_path='data/transactions_excel.xlsx'):
+    if not os.path.isfile(file_path):
+        print(f"Ошибка: {file_path} не является файлом.")
+        return []
+    try:
+        workbook = openpyxl.load_workbook(file_path)
+        sheet = workbook.active
+        transactions = []
+        headers = [cell.value for cell in sheet[1]]
+        for row in sheet.iter_rows(min_row=2, values_only=True):
+            transaction = {headers[i]: row[i] for i in range(len(headers))}
+            transactions.append(transaction)
+        return transactions
+    except (FileNotFoundError, openpyxl.utils.exceptions.InvalidFileException, PermissionError) as e:
+        print(f"Ошибка при загрузке файла: {e}")
+        return []
+
+
