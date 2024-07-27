@@ -1,3 +1,5 @@
 Function: my_function, Args: (1, 2), Kwargs: {}, Result: 3nFunction: my_function, Args: (1, 2), Kwargs: {}, Result: 3nFunction: my_function, Args: (1, 2), Kwargs: {}, Result: 3nFunction: my_function, Args: (1, 2), Kwargs: {}, Result: 3nFunction: my_function, Args: (1, 2), Kwargs: {}, Result: 3nFunction: add, Args: ('1',), Kwargs: {'y': 2}, Error: can only concatenate str (not "int") to strnadd error: can only concatenate str (not "int") to str. Inputs: ('1',), {'y': 2}
 add error: can only concatenate str (not "int") to str. Inputs: ('1',), {'y': 2}
 add ok
+add error: can only concatenate str (not "int") to str. Inputs: ('1',), {'y': 2}
+add ok
